@@ -1,0 +1,963 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071b2a">
+  <title>Немного любви для тебя</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --mint: #8cffc7;
+      --green: #32e69a;
+      --blue: #52c9ff;
+      --deep-blue: #142e73;
+      --night: #071b2a;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      color: #effff9;
+      background:
+        radial-gradient(ellipse at 50% 43%, #123958 0, transparent 42%),
+        radial-gradient(ellipse at 14% 82%, #0a513c 0, transparent 34%),
+        radial-gradient(ellipse at 86% 16%, #102c62 0, transparent 36%),
+        var(--night);
+      font-family: ui-rounded, "Trebuchet MS", system-ui, sans-serif;
+    }
+
+    body::before,
+    body::after {
+      position: fixed;
+      inset: -25%;
+      z-index: -1;
+      content: "";
+      pointer-events: none;
+      background: conic-gradient(from 40deg at 50% 50%, transparent, #37e9a61a, transparent, #48baff20, transparent);
+      filter: blur(54px);
+      animation: aurora 18s linear infinite;
+    }
+
+    body::after {
+      animation-direction: reverse;
+      animation-duration: 27s;
+      opacity: .65;
+      transform: rotate(35deg);
+    }
+
+    .scene {
+      position: relative;
+      width: min(100%, 760px);
+      min-height: 680px;
+      padding: 48px 24px 36px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      isolation: isolate;
+      text-align: center;
+    }
+
+    .eyebrow {
+      margin: 0 0 5px;
+      color: #a8f7d7;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .32em;
+      text-transform: uppercase;
+      animation: fade-in 1.2s both;
+    }
+
+    h1 {
+      margin: 0;
+      background: linear-gradient(100deg, #b8ffdc 5%, #62e5bd 45%, #7dcfff 95%);
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 0 20px #4ceab044);
+      font-size: clamp(2.5rem, 8vw, 5.2rem);
+      font-weight: 800;
+      letter-spacing: -.065em;
+      line-height: 1.05;
+      animation: title-in 1.1s cubic-bezier(.2, .8, .2, 1) both;
+    }
+
+    .subtitle {
+      margin: 13px 0 0;
+      color: #c1dce4;
+      font-size: clamp(.92rem, 2.5vw, 1.08rem);
+      letter-spacing: .035em;
+      animation: fade-in 1.4s .2s both;
+    }
+
+    .love-art {
+      position: relative;
+      width: min(390px, 84vw);
+      height: 375px;
+      margin: 7px 0 -1px;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .orbit {
+      position: absolute;
+      width: 310px;
+      height: 310px;
+      border: 1px solid #8cffc72a;
+      border-radius: 50%;
+      box-shadow: inset 0 0 42px #52c9ff08, 0 0 35px #52c9ff09;
+      animation: orbit-pulse 5s ease-in-out infinite;
+    }
+
+    .orbit::before,
+    .orbit::after {
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      content: "";
+      background: var(--mint);
+      box-shadow: 0 0 14px 4px #8cffc777;
+    }
+
+    .orbit::before { top: 34px; left: 43px; }
+    .orbit::after { right: 23px; bottom: 83px; width: 5px; height: 5px; background: var(--blue); }
+
+    .heart-halo {
+      position: absolute;
+      width: 230px;
+      height: 230px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #4fffc34c 0, #42baff20 43%, transparent 70%);
+      filter: blur(13px);
+      animation: halo 2.2s ease-in-out infinite;
+    }
+
+    .heart {
+      position: relative;
+      width: 126px;
+      height: 126px;
+      margin-top: 10px;
+      transform: rotate(-45deg);
+      background: linear-gradient(145deg, #9affcd 2%, #32e69a 43%, #229be3 100%);
+      filter: drop-shadow(0 0 15px #55ffc7b0) drop-shadow(0 0 43px #2caeff75);
+      animation: heartbeat 1.65s ease-in-out infinite;
+    }
+
+    .heart::before,
+    .heart::after {
+      position: absolute;
+      width: 126px;
+      height: 126px;
+      border-radius: 50%;
+      content: "";
+      background: inherit;
+    }
+
+    .heart::before { top: -63px; left: 0; }
+    .heart::after { top: 0; left: 63px; }
+
+    .heart-shine {
+      position: absolute;
+      z-index: 1;
+      top: 12px;
+      left: 76px;
+      width: 37px;
+      height: 14px;
+      border-radius: 50%;
+      background: #e4fff5b3;
+      filter: blur(5px);
+      transform: rotate(-45deg);
+    }
+
+    .bunny {
+      position: absolute;
+      z-index: 2;
+      right: 29px;
+      bottom: 13px;
+      width: 116px;
+      height: 148px;
+      animation: bunny-bob 2.5s ease-in-out infinite;
+      transform-origin: bottom center;
+    }
+
+    .ear {
+      position: absolute;
+      z-index: -1;
+      top: 0;
+      width: 28px;
+      height: 78px;
+      border: 2px solid #d8fff1;
+      border-radius: 55% 55% 48% 48%;
+      background: linear-gradient(90deg, #d7fff0, #fff);
+      box-shadow: 0 0 15px #7effd63d;
+    }
+
+    .ear::after {
+      position: absolute;
+      inset: 9px 7px;
+      border-radius: inherit;
+      content: "";
+      background: linear-gradient(#9effd0, #92dfff);
+      opacity: .74;
+    }
+
+    .ear-left { left: 25px; transform: rotate(-13deg); animation: ear-left 3.3s ease-in-out infinite; }
+    .ear-right { right: 22px; transform: rotate(12deg); animation: ear-right 3.3s ease-in-out infinite; }
+
+    .bunny-head {
+      position: absolute;
+      top: 46px;
+      left: 10px;
+      width: 96px;
+      height: 76px;
+      border: 2px solid #d8fff1;
+      border-radius: 48% 48% 46% 46%;
+      background: linear-gradient(145deg, #fff 10%, #d8fff0 86%);
+      box-shadow: 0 0 24px #52c9ff52, inset -7px -5px 15px #87dcff40;
+    }
+
+    .eye {
+      position: absolute;
+      top: 30px;
+      width: 6px;
+      height: 9px;
+      border-radius: 50%;
+      background: #194b63;
+      animation: blink 4.2s infinite;
+    }
+
+    .eye-left { left: 27px; }
+    .eye-right { right: 27px; }
+
+    .nose {
+      position: absolute;
+      top: 44px;
+      left: 43px;
+      width: 9px;
+      height: 7px;
+      border-radius: 50% 50% 55% 55%;
+      background: #69cfff;
+    }
+
+    .nose::after {
+      position: absolute;
+      top: 5px;
+      left: 4px;
+      width: 1px;
+      height: 7px;
+      content: "";
+      background: #73989a;
+    }
+
+    .cheek {
+      position: absolute;
+      top: 43px;
+      width: 15px;
+      height: 7px;
+      border-radius: 50%;
+      background: #73e8be77;
+      filter: blur(2px);
+    }
+
+    .cheek-left { left: 10px; }
+    .cheek-right { right: 10px; }
+
+    .bunny-body {
+      position: absolute;
+      right: 15px;
+      bottom: 0;
+      width: 73px;
+      height: 47px;
+      border: 2px solid #d8fff1;
+      border-radius: 48% 48% 40% 42%;
+      background: linear-gradient(140deg, #fafffd, #bdf5e5);
+      box-shadow: 0 0 20px #52c9ff38;
+    }
+
+    .tail {
+      position: absolute;
+      right: 1px;
+      bottom: 5px;
+      width: 24px;
+      height: 24px;
+      border: 2px solid #d8fff1;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #fff, #a9efd8);
+      box-shadow: 0 0 15px #52c9ff4d;
+    }
+
+    .sparkle {
+      position: absolute;
+      color: #ceffeb;
+      font-size: 18px;
+      text-shadow: 0 0 12px #65ffcb;
+      animation: twinkle 2.3s ease-in-out infinite;
+    }
+
+    .sparkle-one { top: 53px; left: 50px; }
+    .sparkle-two { top: 103px; right: 42px; color: #8fd9ff; animation-delay: .8s; }
+    .sparkle-three { bottom: 71px; left: 58px; font-size: 13px; animation-delay: 1.3s; }
+    .sparkle-four { top: 37px; right: 95px; font-size: 13px; animation-delay: .4s; }
+
+    .message {
+      min-height: 30px;
+      margin: 0 0 19px;
+      color: #c1fce5;
+      font-size: .97rem;
+      letter-spacing: .02em;
+      opacity: .9;
+    }
+
+    .love-button {
+      position: relative;
+      padding: 13px 23px;
+      overflow: hidden;
+      border: 1px solid #9effd788;
+      border-radius: 999px;
+      color: #eafff4;
+      background: linear-gradient(110deg, #38cb8f33, #339de333);
+      box-shadow: 0 0 23px #32e69a20, inset 0 0 15px #9effd410;
+      font: inherit;
+      font-size: .9rem;
+      font-weight: 700;
+      letter-spacing: .035em;
+      cursor: pointer;
+      transition: transform .2s, box-shadow .2s, background .2s;
+    }
+
+    .love-button:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(110deg, #38cb8f55, #339de355);
+      box-shadow: 0 5px 30px #32e69a38, inset 0 0 18px #9effd426;
+    }
+
+    .love-button:focus-visible,
+    .love-art:focus-visible {
+      outline: 2px solid var(--mint);
+      outline-offset: 5px;
+    }
+
+    .love-button span { margin-right: 7px; }
+
+    .float-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .floaty {
+      position: absolute;
+      bottom: -35px;
+      color: var(--float-color, var(--mint));
+      font-size: var(--float-size, 18px);
+      opacity: 0;
+      text-shadow: 0 0 13px currentColor;
+      animation: drift-up var(--float-time, 5s) ease-out forwards;
+    }
+
+    .cat-walker {
+      position: fixed;
+      z-index: 4;
+      bottom: 12px;
+      left: 0;
+      width: 130px;
+      height: 112px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      filter: drop-shadow(0 0 13px #5deacb55);
+      animation: cat-walk 22s ease-in-out infinite alternate;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .cat-walker:focus-visible {
+      border-radius: 24px;
+      outline: 2px solid var(--mint);
+      outline-offset: 2px;
+    }
+
+    .cat-svg {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 118px;
+      height: 100px;
+      overflow: visible;
+    }
+
+    .cat-walker.facing-left .cat-svg { transform: scaleX(-1); }
+    .cat-walker.petted .cat-svg { transform: translateY(-5px) scale(1.07); }
+    .cat-walker.petted.facing-left .cat-svg { transform: translateY(-5px) scaleX(-1) scale(1.07); }
+
+    .cat-body {
+      transform-box: fill-box;
+      transform-origin: center bottom;
+      animation: cat-bob .34s ease-in-out infinite alternate;
+    }
+
+    .cat-tail {
+      transform-box: fill-box;
+      transform-origin: 14% 86%;
+      animation: tail-swish .8s ease-in-out infinite alternate;
+    }
+
+    .cat-leg {
+      transform-box: fill-box;
+      transform-origin: center top;
+      animation: cat-step .34s ease-in-out infinite;
+    }
+
+    .cat-leg-diagonal { animation-delay: .17s; }
+    .cat-walker.petted .cat-tail { animation-duration: .25s; }
+    .cat-walker.petted .cat-body { animation-play-state: paused; }
+    .cat-walker.petted .cat-eye { transform: scaleY(.15); }
+
+    .cat-eye {
+      transform-box: fill-box;
+      transform-origin: center;
+      transition: transform .15s;
+    }
+
+    .cat-speech {
+      position: absolute;
+      top: 0;
+      left: -40px;
+      padding: 5px 9px;
+      border: 1px solid #a9ffe0a0;
+      border-radius: 12px 12px 12px 3px;
+      color: #dffff3;
+      background: #0b3445e8;
+      box-shadow: 0 0 16px #52c9ff36;
+      font-size: 11px;
+      font-weight: 700;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(4px) scale(.9);
+      transition: opacity .2s, transform .2s;
+      white-space: nowrap;
+    }
+
+    .cat-walker.petted .cat-speech {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .cat-purr {
+      position: fixed;
+      z-index: 6;
+      color: #b2ffdc;
+      font-size: 19px;
+      pointer-events: none;
+      text-shadow: 0 0 12px #52ffc7;
+      animation: purr-pop .9s ease-out forwards;
+    }
+
+    .shooting-star {
+      position: fixed;
+      z-index: 7;
+      top: var(--star-y);
+      left: -100px;
+      width: 88px;
+      height: 42px;
+      padding: 0;
+      border: 0;
+      color: #e9fff5;
+      background: transparent;
+      font-size: 31px;
+      line-height: 1;
+      text-align: right;
+      text-shadow: 0 0 8px #fff, 0 0 20px #86ffd5, 0 0 38px #52c9ff;
+      cursor: pointer;
+      animation: shoot-across 3.4s linear forwards;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .shooting-star::before {
+      position: absolute;
+      top: 19px;
+      right: 20px;
+      width: 105px;
+      height: 3px;
+      border-radius: 50%;
+      content: "";
+      background: linear-gradient(90deg, transparent, #63ffc8aa, #e7fff9);
+      filter: blur(2px);
+      transform: rotate(-12deg);
+      transform-origin: right center;
+    }
+
+    .shooting-star:focus-visible {
+      outline: 2px solid #b9ffdf;
+      outline-offset: 3px;
+      border-radius: 50%;
+    }
+
+    .wish-burst {
+      position: fixed;
+      inset: 0;
+      z-index: 8;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .wish-spark {
+      position: absolute;
+      left: var(--wish-x);
+      top: var(--wish-y);
+      color: var(--wish-color);
+      font-size: var(--wish-size);
+      opacity: 0;
+      text-shadow: 0 0 14px currentColor;
+      animation: wish-spark-burst 1.9s cubic-bezier(.12, .65, .22, 1) forwards;
+    }
+
+    .wish-reveal {
+      position: fixed;
+      z-index: 9;
+      inset: 0;
+      display: grid;
+      place-content: center;
+      padding: 24px;
+      background: radial-gradient(ellipse at center, #123d4dbb, #071b2a00 65%);
+      opacity: 0;
+      pointer-events: none;
+      text-align: center;
+      transition: opacity .4s ease;
+    }
+
+    .wish-reveal.show { opacity: 1; }
+
+    .wish-reveal strong {
+      display: block;
+      background: linear-gradient(100deg, #b8ffdc, #75cfff);
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 0 20px #70ffd988);
+      font-size: clamp(2rem, 8vw, 4.7rem);
+      letter-spacing: -.055em;
+      animation: wish-title 3.8s ease both;
+    }
+
+    .wish-reveal span {
+      margin-top: 8px;
+      color: #e0fff3;
+      font-size: clamp(.95rem, 3vw, 1.2rem);
+      text-shadow: 0 0 15px #52ffc766;
+    }
+
+    body.wish-magic .heart-halo { animation: wish-heart-glow .9s ease-in-out 3; }
+    body.wish-magic .heart { animation: wish-heart-pop .65s ease-in-out 3; }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: rotate(-45deg) scale(1); }
+      12% { transform: rotate(-45deg) scale(1.09); }
+      24% { transform: rotate(-45deg) scale(1); }
+      36% { transform: rotate(-45deg) scale(1.055); }
+      48% { transform: rotate(-45deg) scale(1); }
+    }
+
+    @keyframes halo {
+      0%, 100% { transform: scale(.86); opacity: .7; }
+      50% { transform: scale(1.16); opacity: 1; }
+    }
+
+    @keyframes orbit-pulse {
+      0%, 100% { transform: scale(.96); opacity: .68; }
+      50% { transform: scale(1.045); opacity: 1; }
+    }
+
+    @keyframes bunny-bob {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50% { transform: translateY(-8px) rotate(2deg); }
+    }
+
+    @keyframes ear-left {
+      0%, 72%, 100% { transform: rotate(-13deg); }
+      80% { transform: rotate(-25deg); }
+      88% { transform: rotate(-9deg); }
+    }
+
+    @keyframes ear-right {
+      0%, 72%, 100% { transform: rotate(12deg); }
+      80% { transform: rotate(24deg); }
+      88% { transform: rotate(8deg); }
+    }
+
+    @keyframes blink {
+      0%, 44%, 48%, 100% { transform: scaleY(1); }
+      46% { transform: scaleY(.12); }
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: .35; transform: scale(.7) rotate(0); }
+      50% { opacity: 1; transform: scale(1.25) rotate(25deg); }
+    }
+
+    @keyframes aurora {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes title-in {
+      from { opacity: 0; transform: translateY(14px); filter: blur(8px); }
+      to { opacity: 1; transform: translateY(0); filter: blur(0) drop-shadow(0 0 20px #4ceab044); }
+    }
+
+    @keyframes fade-in {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes drift-up {
+      0% { opacity: 0; transform: translate3d(0, 0, 0) scale(.65) rotate(0); }
+      12% { opacity: .9; }
+      100% { opacity: 0; transform: translate3d(var(--drift, 15px), -110vh, 0) scale(1.2) rotate(30deg); }
+    }
+
+    @keyframes cat-walk {
+      from { transform: translateX(0); }
+      to { transform: translateX(calc(100vw - 130px)); }
+    }
+
+    @keyframes cat-step {
+      0%, 100% { transform: rotate(15deg) translateY(0); }
+      50% { transform: rotate(-15deg) translateY(-2px); }
+    }
+
+    @keyframes cat-bob {
+      from { transform: translateY(0); }
+      to { transform: translateY(-2.5px); }
+    }
+
+    @keyframes tail-swish {
+      from { transform: rotate(-11deg); }
+      to { transform: rotate(13deg); }
+    }
+
+    @keyframes purr-pop {
+      0% { opacity: 0; transform: translateY(5px) scale(.6); }
+      20% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(-35px) scale(1.25); }
+    }
+
+    @keyframes shoot-across {
+      from { left: -100px; transform: translateY(0) rotate(-12deg); }
+      to { left: calc(100vw + 100px); transform: translateY(8vh) rotate(-12deg); }
+    }
+
+    @keyframes wish-spark-burst {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(.2) rotate(0); }
+      14% { opacity: 1; }
+      100% { opacity: 0; transform: translate(calc(-50% + var(--wish-dx)), calc(-50% + var(--wish-dy))) scale(1.25) rotate(150deg); }
+    }
+
+    @keyframes wish-title {
+      0% { opacity: 0; transform: translateY(16px) scale(.85); filter: blur(9px) drop-shadow(0 0 20px #70ffd900); }
+      22%, 75% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0) drop-shadow(0 0 20px #70ffd988); }
+      100% { opacity: 0; transform: translateY(-8px) scale(1.04); }
+    }
+
+    @keyframes wish-heart-glow {
+      50% { transform: scale(1.5); filter: blur(5px); }
+    }
+
+    @keyframes wish-heart-pop {
+      50% { transform: rotate(-45deg) scale(1.22); }
+    }
+
+    @media (max-width: 480px) {
+      .scene { min-height: 620px; padding-inline: 18px; }
+      .love-art { height: 330px; margin-block: 13px 0; }
+      .orbit { width: 270px; height: 270px; }
+      .bunny { right: 13px; bottom: 4px; transform: scale(.9); }
+      .cat-walker { bottom: 2px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="scene">
+    <p class="eyebrow">маленькая записка для тебя</p>
+    <h1>Я тебя люблю</h1>
+    <p class="subtitle">С тобой весь мой мир сияет ✨</p>
+
+    <div class="love-art" role="button" tabindex="0" aria-label="Подарить немного любви">
+      <div class="orbit"></div>
+      <div class="heart-halo"></div>
+      <div class="heart" aria-hidden="true"><span class="heart-shine"></span></div>
+      <span class="sparkle sparkle-one" aria-hidden="true">✦</span>
+      <span class="sparkle sparkle-two" aria-hidden="true">✧</span>
+      <span class="sparkle sparkle-three" aria-hidden="true">✦</span>
+      <span class="sparkle sparkle-four" aria-hidden="true">✧</span>
+
+      <div class="bunny" aria-hidden="true">
+        <span class="ear ear-left"></span>
+        <span class="ear ear-right"></span>
+        <div class="bunny-head">
+          <span class="eye eye-left"></span>
+          <span class="eye eye-right"></span>
+          <span class="nose"></span>
+          <span class="cheek cheek-left"></span>
+          <span class="cheek cheek-right"></span>
+        </div>
+        <div class="bunny-body"><span class="tail"></span></div>
+      </div>
+    </div>
+
+    <p class="message" aria-live="polite">Маленький зайчик принёс тебе большую любовь.</p>
+    <button class="love-button" type="button"><span aria-hidden="true">♡</span>Подарить немного любви</button>
+  </main>
+  <button class="cat-walker" type="button" aria-label="Погладить котика Моти">
+    <span class="cat-speech" aria-hidden="true">Мур! ♡</span>
+    <svg class="cat-svg" viewBox="0 0 140 110" aria-hidden="true">
+      <defs>
+        <linearGradient id="cat-coat" x1="0" y1="0" x2="1" y2="1">
+          <stop stop-color="#fff0c3"/>
+          <stop offset=".38" stop-color="#ffc47e"/>
+          <stop offset="1" stop-color="#dc7842"/>
+        </linearGradient>
+        <linearGradient id="cat-shadow" x1="0" y1="0" x2="0" y2="1">
+          <stop stop-color="#f7ad68"/>
+          <stop offset="1" stop-color="#bd603f"/>
+        </linearGradient>
+        <radialGradient id="cat-face" cx=".32" cy=".2" r=".85">
+          <stop stop-color="#fff4d7"/>
+          <stop offset=".48" stop-color="#ffd092"/>
+          <stop offset="1" stop-color="#e8894e"/>
+        </radialGradient>
+        <linearGradient id="cat-cream" x1="0" y1="0" x2="0" y2="1">
+          <stop stop-color="#fff9e9"/>
+          <stop offset="1" stop-color="#ffdca9"/>
+        </linearGradient>
+        <linearGradient id="cat-ear" x1="0" y1="0" x2="1" y2="1">
+          <stop stop-color="#fff0d4"/>
+          <stop offset="1" stop-color="#e99464"/>
+        </linearGradient>
+      </defs>
+      <ellipse cx="75" cy="101" rx="39" ry="4" fill="#020f1a" opacity=".38"/>
+      <g class="cat-leg cat-leg-diagonal">
+        <path d="M43 73q1-7 8-6t7 7l-1 21q0 6-8 6t-8-6z" fill="url(#cat-shadow)"/>
+        <path d="M41 96q6 4 13 0" fill="none" stroke="#ffe9c6" stroke-width="2.5" stroke-linecap="round"/>
+      </g>
+      <g class="cat-leg">
+        <path d="M53 73q1-7 8-6t7 7l-1 21q0 6-8 6t-8-6z" fill="url(#cat-coat)"/>
+        <path d="M52 96q6 4 13 0" fill="none" stroke="#fff0d0" stroke-width="2.5" stroke-linecap="round"/>
+      </g>
+      <g class="cat-leg">
+        <path d="M91 72q1-7 8-6t7 7l-1 22q0 6-8 6t-8-6z" fill="url(#cat-coat)"/>
+        <path d="M90 96q6 4 13 0" fill="none" stroke="#fff0d0" stroke-width="2.5" stroke-linecap="round"/>
+      </g>
+      <g class="cat-body">
+        <g class="cat-tail">
+          <path d="M36 78C18 84 13 69 20 59c5-7 13-7 17 0" fill="none" stroke="#c96d43" stroke-width="13" stroke-linecap="round"/>
+          <path d="M36 78C18 84 13 69 20 59c5-7 13-7 17 0" fill="none" stroke="url(#cat-coat)" stroke-width="9" stroke-linecap="round"/>
+          <path d="M19 65q6 3 11-2" fill="none" stroke="#fff0cc" stroke-width="2" stroke-linecap="round" opacity=".8"/>
+        </g>
+        <ellipse cx="73" cy="78" rx="39" ry="23" fill="url(#cat-shadow)"/>
+        <ellipse cx="71" cy="72" rx="36" ry="20" fill="url(#cat-coat)"/>
+        <ellipse cx="80" cy="82" rx="22" ry="13" fill="url(#cat-cream)" opacity=".96"/>
+        <path d="M57 60q-5 9 1 16m38-17q7 8 2 16" fill="none" stroke="#d9834f" stroke-width="4" stroke-linecap="round" opacity=".8"/>
+        <ellipse cx="72" cy="77" rx="28" ry="5" fill="#fff5dc" opacity=".2"/>
+        <path d="m42 45 4-25q1-8 8-2l17 17M77 35l17-17q7-6 9 2l4 26" fill="url(#cat-coat)" stroke="#ffe9c6" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="m50 32 2-9 11 11m26-2 9-9 2 12" fill="#e98b9a"/>
+        <ellipse cx="73" cy="52" rx="35" ry="30" fill="url(#cat-face)" stroke="#fff0d0" stroke-width="2.5"/>
+        <path d="M54 37q7-7 14 0m11 0q7-7 14 0" fill="none" stroke="#fff8e5" stroke-width="5" stroke-linecap="round" opacity=".75"/>
+        <path d="M51 44q5-4 9 0m25 0q5-4 9 0" fill="none" stroke="#cf794b" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+        <ellipse class="cat-eye" cx="61" cy="51" rx="3.5" ry="5" fill="#254e55"/>
+        <ellipse class="cat-eye" cx="84" cy="51" rx="3.5" ry="5" fill="#254e55"/>
+        <circle cx="62" cy="49" r="1.2" fill="#fff"/>
+        <circle cx="85" cy="49" r="1.2" fill="#fff"/>
+        <ellipse cx="73" cy="62" rx="16" ry="10" fill="url(#cat-cream)"/>
+        <path d="m69 59 5 4 5-4q-5-5-10 0" fill="#e57c8e"/>
+        <path d="M74 63v5m0 0q-5 5-9 0m9 0q5 5 9 0" fill="none" stroke="#79545a" stroke-width="1.7" stroke-linecap="round"/>
+        <path d="M48 59 31 56m17 8-18 3m62-8 17-3m-17 8 18 3" fill="none" stroke="#fff1d7" stroke-width="1.8" stroke-linecap="round"/>
+        <circle cx="31" cy="56" r="1.5" fill="#fff1d7"/>
+        <circle cx="107" cy="56" r="1.5" fill="#fff1d7"/>
+        <path d="M62 78q11 6 23 0" fill="none" stroke="#fff6df" stroke-width="2" stroke-linecap="round" opacity=".75"/>
+      </g>
+      <g class="cat-leg cat-leg-diagonal">
+        <path d="M99 73q1-7 8-6t7 7l-1 21q0 6-8 6t-8-6z" fill="url(#cat-coat)"/>
+        <path d="M98 96q6 4 13 0" fill="none" stroke="#fff0d0" stroke-width="2.5" stroke-linecap="round"/>
+      </g>
+    </svg>
+  </button>
+  <div class="float-layer" aria-hidden="true"></div>
+  <div class="wish-burst" aria-hidden="true"></div>
+  <div class="wish-reveal" aria-live="polite" aria-atomic="true">
+    <div><strong>ЖЕЛАНИЕ СБЫЛОСЬ ✨</strong><span>Ты — моя любимая вселенная.</span></div>
+  </div>
+
+  <script>
+    const layer = document.querySelector(".float-layer");
+    const message = document.querySelector(".message");
+    const art = document.querySelector(".love-art");
+    const button = document.querySelector(".love-button");
+    const cat = document.querySelector(".cat-walker");
+    const wishBurst = document.querySelector(".wish-burst");
+    const wishReveal = document.querySelector(".wish-reveal");
+    const notes = [
+      "Маленький зайчик принёс тебе большую любовь.",
+      "С тобой даже обычные дни становятся волшебными.",
+      "Лови маленькое, но крепкое объятие!",
+      "Моё сердце радостно танцует для тебя."
+    ];
+    let noteIndex = 0;
+    let catReactionTimeout;
+    let lastPetAt = 0;
+    let shootingStarTimer;
+    let wishRevealTimeout;
+
+    function sendLove(x = window.innerWidth / 2, y = window.innerHeight * .52) {
+      const colors = ["#8cffc7", "#52c9ff", "#b6ff89", "#a7e3ff"];
+      const symbols = ["♥", "✦", "♡", "✧"];
+
+      for (let i = 0; i < 24; i += 1) {
+        const particle = document.createElement("span");
+        particle.className = "floaty";
+        particle.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        particle.style.left = `${x + (Math.random() - .5) * 150}px`;
+        particle.style.top = `${y + (Math.random() - .5) * 55}px`;
+        particle.style.setProperty("--float-color", colors[Math.floor(Math.random() * colors.length)]);
+        particle.style.setProperty("--float-size", `${12 + Math.random() * 19}px`);
+        particle.style.setProperty("--float-time", `${3.2 + Math.random() * 2.5}s`);
+        particle.style.setProperty("--drift", `${(Math.random() - .5) * 170}px`);
+        layer.append(particle);
+        particle.addEventListener("animationend", () => particle.remove(), { once: true });
+      }
+
+      noteIndex = (noteIndex + 1) % notes.length;
+      message.textContent = notes[noteIndex];
+    }
+
+    function petCat() {
+      const now = Date.now();
+      if (now - lastPetAt < 180) return;
+      lastPetAt = now;
+      cat.classList.add("petted");
+      cat.querySelector(".cat-speech").textContent = ["Мур! ♡", "Как приятно! ✨", "Мяу! 💚"][Math.floor(Math.random() * 3)];
+      window.clearTimeout(catReactionTimeout);
+      catReactionTimeout = window.setTimeout(() => cat.classList.remove("petted"), 1100);
+
+      const bounds = cat.getBoundingClientRect();
+      const purr = document.createElement("span");
+      purr.className = "cat-purr";
+      purr.textContent = Math.random() > .5 ? "♡" : "♪";
+      purr.style.left = `${bounds.left + bounds.width * .6}px`;
+      purr.style.top = `${bounds.top + 12}px`;
+      layer.append(purr);
+      purr.addEventListener("animationend", () => purr.remove(), { once: true });
+    }
+
+    function makeWish(x, y) {
+      const colors = ["#baffdc", "#72d9ff", "#ffffff", "#a7ff8c", "#dbb5ff"];
+      for (let i = 0; i < 54; i += 1) {
+        const spark = document.createElement("span");
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 90 + Math.random() * Math.max(window.innerWidth, window.innerHeight) * .43;
+        spark.className = "wish-spark";
+        spark.textContent = Math.random() > .28 ? "✦" : "♡";
+        spark.style.setProperty("--wish-x", `${x}px`);
+        spark.style.setProperty("--wish-y", `${y}px`);
+        spark.style.setProperty("--wish-dx", `${Math.cos(angle) * distance}px`);
+        spark.style.setProperty("--wish-dy", `${Math.sin(angle) * distance}px`);
+        spark.style.setProperty("--wish-color", colors[Math.floor(Math.random() * colors.length)]);
+        spark.style.setProperty("--wish-size", `${11 + Math.random() * 20}px`);
+        spark.style.animationDelay = `${Math.random() * .22}s`;
+        wishBurst.append(spark);
+        spark.addEventListener("animationend", () => spark.remove(), { once: true });
+      }
+
+      document.body.classList.add("wish-magic");
+      wishReveal.classList.add("show");
+      window.clearTimeout(wishRevealTimeout);
+      wishRevealTimeout = window.setTimeout(() => {
+        wishReveal.classList.remove("show");
+        document.body.classList.remove("wish-magic");
+      }, 3900);
+      sendLove(x, y);
+    }
+
+    function scheduleShootingStar() {
+      if (document.hidden || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      shootingStarTimer = window.setTimeout(() => {
+        const star = document.createElement("button");
+        const top = 12 + Math.random() * 58;
+        star.className = "shooting-star";
+        star.type = "button";
+        star.textContent = "✦";
+        star.setAttribute("aria-label", "Поймай падающую звезду и загадай желание");
+        star.style.setProperty("--star-y", `${top}vh`);
+        document.body.append(star);
+
+        let caught = false;
+        const removalTimer = window.setTimeout(() => star.remove(), 3500);
+        star.addEventListener("click", () => {
+          if (caught) return;
+          caught = true;
+          window.clearTimeout(removalTimer);
+          const bounds = star.getBoundingClientRect();
+          star.remove();
+          makeWish(bounds.left + bounds.width / 2, bounds.top + bounds.height / 2);
+        }, { once: true });
+        star.addEventListener("animationend", () => star.remove(), { once: true });
+        star.addEventListener("animationend", scheduleShootingStar, { once: true });
+      }, 4500 + Math.random() * 5500);
+    }
+
+    button.addEventListener("click", () => sendLove());
+    art.addEventListener("click", (event) => sendLove(event.clientX, event.clientY));
+    art.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        sendLove();
+      }
+    });
+
+    cat.addEventListener("click", petCat);
+    cat.addEventListener("animationiteration", () => cat.classList.toggle("facing-left"));
+    cat.addEventListener("pointerenter", (event) => {
+      if (event.buttons) petCat();
+    });
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        window.clearTimeout(shootingStarTimer);
+      } else {
+        scheduleShootingStar();
+      }
+    });
+    scheduleShootingStar();
+
+    window.setInterval(() => {
+      if (document.hidden) return;
+      const mote = document.createElement("span");
+      mote.className = "floaty";
+      mote.textContent = Math.random() > .5 ? "✧" : "·";
+      mote.style.left = `${Math.random() * 100}vw`;
+      mote.style.setProperty("--float-color", Math.random() > .5 ? "#8cffc7" : "#52c9ff");
+      mote.style.setProperty("--float-size", `${10 + Math.random() * 12}px`);
+      mote.style.setProperty("--float-time", `${7 + Math.random() * 5}s`);
+      mote.style.setProperty("--drift", `${(Math.random() - .5) * 90}px`);
+      layer.append(mote);
+      mote.addEventListener("animationend", () => mote.remove(), { once: true });
+    }, 700);
+  </script>
+</body>
+</html>
